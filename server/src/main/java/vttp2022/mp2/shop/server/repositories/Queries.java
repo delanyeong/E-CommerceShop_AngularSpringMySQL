@@ -25,4 +25,12 @@ public class Queries {
         """
     ;
 
+    //JWT
+    public static final String SQL_SAVE_NEW_ROLE = """
+            INSERT IGNORE INTO role (role_name, role_description) VALUES (?, ?)
+        """;
+
+    public static final String SQL_FIND_ROLE_BY_ROLENAME = """
+            select * from role where role_name = ?
+        """;
 }
