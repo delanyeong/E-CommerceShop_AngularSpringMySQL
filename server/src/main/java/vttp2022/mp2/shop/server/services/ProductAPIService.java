@@ -2,14 +2,10 @@ package vttp2022.mp2.shop.server.services;
 
 import java.io.Reader;
 import java.io.StringReader;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

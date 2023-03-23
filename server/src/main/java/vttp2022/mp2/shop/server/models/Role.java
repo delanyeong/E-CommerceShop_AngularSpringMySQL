@@ -1,5 +1,6 @@
 package vttp2022.mp2.shop.server.models;
 
+
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 public class Role {
@@ -18,4 +19,12 @@ public class Role {
 		r.setRoleDescription(rs.getString("role_description"));
 		return r;
 	}
+  
+    @Override
+    public String toString() {
+      return "Role [roleName=" + roleName + ", roleDescription=" + roleDescription + "]";
+    }
+
+  
+    
 }
