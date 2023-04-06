@@ -23,38 +23,38 @@ import vttp2022.mp2.shop.server.repositories.ProductRepository;
 @Service
 public class ProductAPIService {
 
-    @Autowired
-    private ProductRepository productRepo;
+    // @Autowired
+    // private ProductRepository productRepo;
 
-    private static final String URL = "https://dummyjson.com/products/";
+    // private static final String URL = "https://dummyjson.com/products/";
 
-    // @Value("${API_KEY}")
-    // private String key;
+    // // @Value("${API_KEY}")
+    // // private String key;
 
-    public List<Product> getProducts() {
+    // public List<Product> getProducts() {
 
-        String url = UriComponentsBuilder.fromUriString(URL)
-                .toUriString();
+    //     String url = UriComponentsBuilder.fromUriString(URL)
+    //             .toUriString();
 
-        RequestEntity<Void> req = RequestEntity.get(url).build();
-        RestTemplate template = new RestTemplate();
-        ResponseEntity<String> resp = template.exchange(req, String.class);
-        String payload = resp.getBody();
-        System.out.println("payload: " + payload);
-        Reader strReader = new StringReader(payload);
-        JsonReader jsonReader = Json.createReader(strReader);
-        JsonObject gifResult = jsonReader.readObject();
-        JsonArray gifData = gifResult.getJsonArray("products");
+    //     RequestEntity<Void> req = RequestEntity.get(url).build();
+    //     RestTemplate template = new RestTemplate();
+    //     ResponseEntity<String> resp = template.exchange(req, String.class);
+    //     String payload = resp.getBody();
+    //     System.out.println("payload: " + payload);
+    //     Reader strReader = new StringReader(payload);
+    //     JsonReader jsonReader = Json.createReader(strReader);
+    //     JsonObject gifResult = jsonReader.readObject();
+    //     JsonArray gifData = gifResult.getJsonArray("products");
 
-        List<Product> gifList = new LinkedList<>();
-        for (int i = 0; i < gifData.size(); i++) {
-            // data[i]
-            JsonObject gifDataElements = gifData.getJsonObject(i);
-            gifList.add(Product.create(gifDataElements));
-        }
-        System.out.println(gifList.toString());
-        productRepo.saveProducts(gifList);
-        return gifList;
+    //     List<Product> gifList = new LinkedList<>();
+    //     for (int i = 0; i < gifData.size(); i++) {
+    //         // data[i]
+    //         JsonObject gifDataElements = gifData.getJsonObject(i);
+    //         gifList.add(Product.create(gifDataElements));
+    //     }
+    //     System.out.println(gifList.toString());
+    //     productRepo.saveProducts(gifList);
+    //     return gifList;
 
-    }
+    // }
 }

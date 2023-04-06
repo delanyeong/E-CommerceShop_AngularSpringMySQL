@@ -2,6 +2,7 @@ package vttp2022.mp2.shop.server.repositories;
 
 public class Queries {
     
+    // Products (first draft)
     public static final String SQL_INIT_PRODUCTS_TABLE = """
             CREATE TABLE IF NOT EXISTS products (
                 id INTEGER PRIMARY KEY,
@@ -15,7 +16,7 @@ public class Queries {
     ;
 
     public static final String SQL_INIT_PRODUCTS = """
-            INSERT INTO products (id, name, category, price, image, quantity)
+            INSERT INTO product (id, name, category, price, image, quantity)
             VALUES (?, ?, ?, ?, ?, ?)
             ON DUPLICATE KEY UPDATE 
             name = VALUES(name), 
@@ -24,6 +25,16 @@ public class Queries {
             image = VALUES(image)
         """
     ;
+
+    // Product (second draft)
+    public static final String SQL_ADD_NEW_PRODUCT = """
+            INSERT INTO product (product_name, product_description, product_discounted_price, product_actual_price)
+            VALUES (?, ?, ?, ?)
+        """;
+
+    public static final String SQL_FIND_PRODUCT_BY_NAME = """
+            select * from product where product_name = ?
+        """;
 
     //JWT
     //Role
@@ -57,17 +68,9 @@ public class Queries {
             VALUES (?, ?) 
         """;
 
-    public static final String SQL_FIND_USER_BY_USERNAME = """
-            select * from user where user_name = ?
-        """;
-
-    public static final String SQL_FIND_USER = """
-            SELECT u.user_name, u.user_first_name, u.user_last_name, u.user_password, r.role_name, r.role_description
-            FROM user u
-            JOIN user_role ur ON u.user_name = ur.user_name
-            JOIN role r ON ur.role_name = r.role_name
-            WHERE u.user_name = ?
-        """;
+    // public static final String SQL_FIND_USER_BY_USERNAME = """
+    //         select * from user where user_name = ?
+    //     """;
 
     public static final String SQL_FIND_USERNAME = """
             SELECT u.user_name, u.user_first_name, u.user_last_name, u.user_password, r.role_name, r.role_description
@@ -75,6 +78,6 @@ public class Queries {
             JOIN user_role ur ON u.user_name = ur.user_name
             JOIN role r ON ur.role_name = r.role_name
             WHERE u.user_name = ?
-            """;
+        """;
     
 }
