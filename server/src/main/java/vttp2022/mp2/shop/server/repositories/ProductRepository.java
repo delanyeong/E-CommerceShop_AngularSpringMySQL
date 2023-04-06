@@ -54,18 +54,20 @@ public class ProductRepository {
 
         //Product image save part
         // Retrieve the product_id of the newly added product
+        // gives invalid column name error but can ignore
         Long productId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Long.class);
 
         // Save each image to image_model table and add relation between product and image in product_images table
         for (ImageModel image : product.getProductImages()) {
             jdbcTemplate.update("INSERT INTO image_model (name, type, picByte) VALUES (?, ?, ?)", image.getName(), image.getType(), image.getPicByte());
 
+            // gives invalid column name error but can ignore
             Long imageId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Long.class);
 
             jdbcTemplate.update("INSERT INTO product_images (product_id, image_id) VALUES (?, ?)", productId, imageId);
         }
 
-        // =========
+        //
         SqlRowSet rs = jdbcTemplate.queryForRowSet(SQL_FIND_PRODUCT_BY_NAME, product.getProductName());
         if (!rs.next())
 			// return Optional.empty();
