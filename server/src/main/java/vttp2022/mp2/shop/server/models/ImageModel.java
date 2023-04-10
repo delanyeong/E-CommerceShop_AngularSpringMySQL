@@ -7,9 +7,7 @@ public class ImageModel {
     private String type;
     private byte[] picByte;
 
-    public ImageModel() {
-
-    }
+    public ImageModel() {}
 
     public ImageModel(String name, String type, byte[] picByte) {
         this.name = name;

@@ -15,6 +15,7 @@ public class Queries {
         """
     ;
 
+    // ctd from above
     public static final String SQL_INIT_PRODUCTS = """
             INSERT INTO product (id, name, category, price, image, quantity)
             VALUES (?, ?, ?, ?, ?, ?)
@@ -34,6 +35,11 @@ public class Queries {
 
     public static final String SQL_FIND_PRODUCT_BY_NAME = """
             select * from product where product_name = ?
+        """;
+
+    // Product (find all)
+    public static final String SQL_FIND_ALL_PRODUCTS = """
+            SELECT * from product
         """;
 
     //JWT

@@ -2,6 +2,7 @@ package vttp2022.mp2.shop.server.services;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,10 @@ public class ProductService {
 
     public Product addNewProduct(Product product) throws SQLException, IOException{ 
         return productRepo.save(product);
+    }
+
+    public List<Product> getAllProducts() {
+        return productRepo.findAll();
     }
 
 

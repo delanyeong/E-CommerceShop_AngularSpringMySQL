@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +37,7 @@ public class ProductController {
     @Autowired
     private ProductService productSvc;
     
+    @PreAuthorize("hasRole('Admin')")
     @PostMapping(path="/addNewProduct", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
     public Product addNewProduct(
         @RequestPart("product") Product product,
@@ -66,23 +68,34 @@ public class ProductController {
         return imageModels;
     }
 
-    // @Autowired
-    // private ProductAPIService productAISvc;
+    @GetMapping(path="/getAllProducts")
+    public List<Product> getAllProducts() {
+        return productSvc.getAllProducts();
+    }
 
-    // @GetMapping (path="getProducts", produces = MediaType.APPLICATION_JSON_VALUE)
-    // @ResponseBody
-    // public ResponseEntity<String> getProducts() {
 
-    //     List<Product> products = productAISvc.getProducts();
-    //     JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
-    //     products.stream()
-    //         .forEach(v -> {
-    //             arrBuilder.add(v.toJson());
-    //         });
+    // NOT IN USE
+    /* *** GIPHY template try only (Not in use) ***
+        @Autowired
+        private ProductAPIService productAISvc;
 
-    //     return ResponseEntity.ok(arrBuilder.build().toString());
+        @GetMapping (path="getProducts", produces = MediaType.APPLICATION_JSON_VALUE)
+        @ResponseBody
+        public ResponseEntity<String> getProducts() {
 
-    // }
+            List<Product> products = productAISvc.getProducts();
+            JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
+            products.stream()
+                .forEach(v -> {
+                    arrBuilder.add(v.toJson());
+                });
+
+            return ResponseEntity.ok(arrBuilder.build().toString());
+        }
+    */
+
+    
+
 
 
 
