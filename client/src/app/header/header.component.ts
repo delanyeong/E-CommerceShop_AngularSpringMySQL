@@ -23,11 +23,20 @@ export class HeaderComponent implements OnInit {
   //clear localStorage when logout
   public logout() {
     this.userAuthService.clear()
-    this.router.navigate(['/home'])
+    this.router.navigate(['/'])
   }
 
   public usrSvcRoleMatch(allowedRoles:any) {
     return this.userService.roleMatch(allowedRoles)
+  }
+
+  public isAdmin() {
+    return this.userAuthService.isAdmin();
+  }
+
+  public isUser() {
+    return this.userAuthService.isUser();
+    return this.userAuthService.isUser();
   }
 
 }

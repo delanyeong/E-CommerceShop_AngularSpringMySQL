@@ -15,6 +15,17 @@ import { RouterModule } from '@angular/router';
 import { UserService } from './_services/user.service';
 import { AuthGuard } from './_auth/auth.guard';
 import { AuthInterceptor } from './_auth/auth.interceptor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import{MatInputModule} from '@angular/material/input';
+import { AddNewProductComponent } from './add-new-product/add-new-product.component';
+import {MatGridListModule} from '@angular/material/grid-list';
+import { DragDirective } from './drag.directive';
+
+
+
 
 @NgModule({
   declarations: [
@@ -24,7 +35,9 @@ import { AuthInterceptor } from './_auth/auth.interceptor';
     UserComponent,
     LoginComponent,
     HeaderComponent,
-    ForbiddenComponent
+    ForbiddenComponent,
+    AddNewProductComponent,
+    DragDirective
   ],
   imports: [
     BrowserModule,
@@ -32,7 +45,13 @@ import { AuthInterceptor } from './_auth/auth.interceptor';
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatGridListModule
   ],
   providers: [
     AuthGuard,
