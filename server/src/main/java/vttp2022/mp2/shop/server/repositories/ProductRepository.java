@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import vttp2022.mp2.shop.server.models.ImageModel;
 import vttp2022.mp2.shop.server.models.Product;
@@ -130,14 +131,36 @@ public class ProductRepository {
         
         return products;
     }
+
+    public void deleteById(Integer productId) throws SQLException {
+        // Get the IDs of the image models associated with the product being deleted
+        List<Long> imageModelIds = jdbcTemplate.queryForList("SELECT image_id FROM product_images WHERE product_id = ?", Long.class, productId);
     
+        // Delete records from product_images table for the product to be deleted
+        jdbcTemplate.update("DELETE FROM product_images WHERE product_id = ?", productId);
+    
+        // Delete records from image_model table for the image models associated with the product being deleted
+        jdbcTemplate.update("DELETE FROM image_model WHERE id IN (" + StringUtils.collectionToCommaDelimitedString(imageModelIds) + ")");
+    
+        // Delete the product from the product table
+        int rowsAffected = jdbcTemplate.update(SQL_DELETE_PRODUCT, productId);
+    
+        if (rowsAffected == 0) {
+            throw new SQLException("Deleting product failed, no rows affected.");
+        }
+    }
+    
+    
+    
+    
+    
+
+
     /*  *** Simple way only (Not in use) ***
         public List<Product> findAll() {
             return jdbcTemplate.query(SQL_FIND_ALL_PRODUCTS, BeanPropertyRowMapper.newInstance(Product.class));
         }
     */
-    
-    
     
     // METHOD: NOT IN USE
     /*  *** GIPHY template try only (Not in use) ***
@@ -157,5 +180,4 @@ public class ProductRepository {
         }
     */
     
-
 }

@@ -42,6 +42,27 @@ public class Queries {
             SELECT * from product
         """;
 
+    // Delete
+    public static final String SQL_SELECT_IMAGEID = """
+        SELECT image_id FROM product_images WHERE product_id = ?
+        """;
+
+    public static final String SQL_DELETEPRODUCTBYID1_PRODUCTIMAGES = """
+        DELETE FROM product_images WHERE product_id = ?
+        """;
+        
+    public static final String SQL_DELETEPRODUCTBYID2_IMAGEMODEL = """
+        DELETE FROM image_model WHERE id IN
+        """;
+            
+    public static final String SQL_DELETEPRODUCTBYID3_PRODUCT = """
+        DELETE FROM product WHERE product_id = ?
+        """;
+
+    public static final String SQL_DELETE_PRODUCT = """
+        DELETE FROM product WHERE product_id = ?
+        """;
+    
     //JWT
     //Role
     public static final String SQL_SAVE_NEW_ROLE = """

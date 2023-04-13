@@ -24,5 +24,8 @@ public class ProductService {
         return productRepo.findAll();
     }
 
+    public void deleteProductDetails(Integer productId) throws SQLException {
+        productRepo.deleteById(productId);
+    }
 
 }
