@@ -24,6 +24,10 @@ public class ProductService {
         return productRepo.findAll();
     }
 
+    public Product getProductDetailsById(Integer productId) throws SQLException, IOException {
+        return productRepo.findById(productId);
+    }
+
     public void deleteProductDetails(Integer productId) throws SQLException {
         productRepo.deleteById(productId);
     }

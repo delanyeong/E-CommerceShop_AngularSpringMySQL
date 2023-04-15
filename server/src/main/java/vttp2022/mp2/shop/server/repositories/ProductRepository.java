@@ -14,14 +14,18 @@ import vttp2022.mp2.shop.server.models.Product;
 
 import static vttp2022.mp2.shop.server.repositories.Queries.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Repository
 public class ProductRepository {
@@ -149,6 +153,66 @@ public class ProductRepository {
             throw new SQLException("Deleting product failed, no rows affected.");
         }
     }
+
+    public Product findById(Integer productId) throws SQLException {
+        String sql = "SELECT p.product_id, p.product_name, p.product_description, " +
+                "p.product_discounted_price, p.product_actual_price, i.id, i.name, i.type, i.picByte " +
+                "FROM product p " +
+                "INNER JOIN product_images pi ON p.product_id = pi.product_id " +
+                "INNER JOIN image_model i ON pi.image_id = i.id " +
+                "WHERE p.product_id = ?";
+    
+        SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, productId);
+    
+        Product product = null;
+        Set<ImageModel> images = new HashSet<>();
+    
+        while (rs.next()) {
+            if (product == null) {
+                product = new Product();
+                product.setProductId(rs.getInt("product_id"));
+                product.setProductName(rs.getString("product_name"));
+                product.setProductDescription(rs.getString("product_description"));
+                product.setProductDiscountedPrice(rs.getDouble("product_discounted_price"));
+                product.setProductActualPrice(rs.getDouble("product_actual_price"));
+            }
+    
+            ImageModel image = new ImageModel();
+            image.setId(rs.getLong("id"));
+            image.setName(rs.getString("name"));
+            image.setType(rs.getString("type"));
+    
+            Object obj = rs.getObject("picByte");
+            if (obj != null) {
+                if (obj instanceof byte[]) {
+                    image.setPicByte((byte[]) obj);
+                } else {
+                    throw new SQLException("Invalid column type for column 'picByte'");
+                }
+            }
+    
+            images.add(image);
+        }
+    
+        if (product != null) {
+            product.setProductImages(images);
+        }
+    
+        return product;
+    }
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+    
+
     
     
     

@@ -5,6 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FileHandle } from '../_model/file-handle.model';
 import { Product } from '../_model/product.model';
 import { ProductService } from '../_services/product.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-add-new-product',
@@ -21,10 +22,13 @@ export class AddNewProductComponent implements OnInit {
     productImages: []
   }
 
-  constructor(private productService: ProductService, private sanitizer: DomSanitizer) {}
+  constructor(
+    private productService: ProductService, 
+    private sanitizer: DomSanitizer,
+    private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    
+    this.product = this.activatedRoute.snapshot.data['product'];
   }
 
   addProduct(productForm: NgForm) {

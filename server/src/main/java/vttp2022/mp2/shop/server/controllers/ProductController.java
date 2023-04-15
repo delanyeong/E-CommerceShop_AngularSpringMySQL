@@ -75,6 +75,11 @@ public class ProductController {
         return productSvc.getAllProducts();
     }
 
+    @GetMapping({"/getProductDetailsById/{productId}"})
+    public Product getProductDetailsById(@PathVariable("productId") Integer productId) throws SQLException, IOException {
+        return productSvc.getProductDetailsById(productId);
+    }
+
     @DeleteMapping(path="/deleteProductDetails/{productId}")
     public void deleteProductDetails(@PathVariable("productId") Integer productId) throws SQLException {
         productSvc.deleteProductDetails(productId);
