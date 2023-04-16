@@ -75,7 +75,6 @@ public class ProductController {
         return productSvc.getAllProducts();
     }
 
-    @PreAuthorize("hasRole('Admin')")
     @GetMapping({"/getProductDetailsById/{productId}"})
     public Product getProductDetailsById(@PathVariable("productId") Integer productId) throws SQLException, IOException {
         return productSvc.getProductDetailsById(productId);

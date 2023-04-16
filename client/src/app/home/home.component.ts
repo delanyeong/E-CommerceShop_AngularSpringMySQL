@@ -4,6 +4,7 @@ import { Product } from '../_model/product.model';
 import { map } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ImageProcessingService } from '../image-processing.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -17,6 +18,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private productSvc: ProductService,
     private imageProcessingService: ImageProcessingService,
+    private router: Router
 
     ) { }
 
@@ -37,6 +39,10 @@ export class HomeComponent implements OnInit {
         console.log(error);
       }
     );
+  }
+
+  showProductDetails(productId:any) {
+    this.router.navigate(['/productViewDetails', {productId: productId}])
   }
 
 }
