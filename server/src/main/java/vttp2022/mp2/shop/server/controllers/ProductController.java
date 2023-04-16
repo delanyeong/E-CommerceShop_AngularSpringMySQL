@@ -70,16 +70,19 @@ public class ProductController {
         return imageModels;
     }
 
+    @PreAuthorize("hasRole('Admin')")
     @GetMapping(path="/getAllProducts")
     public List<Product> getAllProducts() {
         return productSvc.getAllProducts();
     }
 
+    @PreAuthorize("hasRole('Admin')")
     @GetMapping({"/getProductDetailsById/{productId}"})
     public Product getProductDetailsById(@PathVariable("productId") Integer productId) throws SQLException, IOException {
         return productSvc.getProductDetailsById(productId);
     }
 
+    @PreAuthorize("hasRole('Admin')")
     @DeleteMapping(path="/deleteProductDetails/{productId}")
     public void deleteProductDetails(@PathVariable("productId") Integer productId) throws SQLException {
         productSvc.deleteProductDetails(productId);

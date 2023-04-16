@@ -14,13 +14,10 @@ import vttp2022.mp2.shop.server.models.Product;
 
 import static vttp2022.mp2.shop.server.repositories.Queries.*;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -231,30 +228,5 @@ public class ProductRepository {
     
         return product;
     }
-    
-    
-    /*  *** Simple way only (Not in use) ***
-        public List<Product> findAll() {
-            return jdbcTemplate.query(SQL_FIND_ALL_PRODUCTS, BeanPropertyRowMapper.newInstance(Product.class));
-        }
-    */
-    
-    // METHOD: NOT IN USE
-    /*  *** GIPHY template try only (Not in use) ***
-
-        public void saveProducts (List<Product> gifList) {
-            jdbcTemplate.update(SQL_INIT_PRODUCTS_TABLE);
-            gifList.stream()
-                .forEach(v -> {
-                    jdbcTemplate.update(SQL_INIT_PRODUCTS, 
-                        v.getId(), 
-                        v.getName(), 
-                        v.getCategory(), 
-                        v.getPrice(), 
-                        v.getImage(), 
-                        v.getQuantity());
-                });
-        }
-    */
     
 }
