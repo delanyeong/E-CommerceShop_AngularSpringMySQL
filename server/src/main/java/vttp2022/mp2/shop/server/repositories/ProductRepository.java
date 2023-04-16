@@ -36,60 +36,91 @@ public class ProductRepository {
 
 
     // METHOD: SAVE PRODUCT
-    /* 
-    *** KEEP THIS WORKING VERSION ***
-        public Product save(Product product) throws SQLException {
-            int rowsAffected = jdbcTemplate.update(SQL_ADD_NEW_PRODUCT, product.getProductName(), product.getProductDescription(), product.getProductDiscountedPrice(), product.getProductActualPrice());
+    // PREVIOUS WORKING VERSION
+    // public Product save(Product product) throws SQLException, IOException {
 
-            if (rowsAffected == 0) {
-                throw new SQLException("Creating user failed, no rows affected.");
-            }
+    //     //Product details save part
+    //     int rowsAffected = jdbcTemplate.update(SQL_ADD_NEW_PRODUCT, product.getProductName(), product.getProductDescription(), product.getProductDiscountedPrice(), product.getProductActualPrice());
 
-            SqlRowSet rs = jdbcTemplate.queryForRowSet(SQL_FIND_PRODUCT_BY_NAME, product.getProductName());
-            if (!rs.next())
-                // return Optional.empty();
-                throw new SQLException("Creating role failed, no ID obtained.");
-            return Product.create(rs);
-        }
-    */
-    
+    //     if (rowsAffected == 0) {
+    //         throw new SQLException("Creating product failed, no rows affected.");
+    //     }
 
-    // *** LATEST WORKING VERSION (START) ***
+    //     //Product image save part
+    //     // Retrieve the product_id of the newly added product
+    //     // gives invalid column name error but can ignore
+    //     Long productId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Long.class);
+
+    //     // Save each image to image_model table and add relation between product and image in product_images table
+    //     for (ImageModel image : product.getProductImages()) {
+    //         jdbcTemplate.update("INSERT INTO image_model (name, type, picByte) VALUES (?, ?, ?)", image.getName(), image.getType(), image.getPicByte());
+
+    //         // gives invalid column name error but can ignore
+    //         Long imageId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Long.class);
+
+    //         jdbcTemplate.update("INSERT INTO product_images (product_id, image_id) VALUES (?, ?)", productId, imageId);
+    //     }
+
+    //     //
+    //     SqlRowSet rs = jdbcTemplate.queryForRowSet(SQL_FIND_PRODUCT_BY_NAME, product.getProductName());
+    //     if (!rs.next())
+	// 		// return Optional.empty();
+    //         throw new SQLException("Creating product failed, no ID obtained.");
+	// 	return Product.create(rs);
+    // }
+
+    // LATEST WORKING VERSION
     public Product save(Product product) throws SQLException, IOException {
 
-        //Product details save part
-        int rowsAffected = jdbcTemplate.update(SQL_ADD_NEW_PRODUCT, product.getProductName(), product.getProductDescription(), product.getProductDiscountedPrice(), product.getProductActualPrice());
-
-        if (rowsAffected == 0) {
-            throw new SQLException("Creating product failed, no rows affected.");
+        // Check if product exists in the database
+        String findProductByIdQuery = "SELECT * FROM product WHERE product_id=?";
+        List<Product> products = jdbcTemplate.query(findProductByIdQuery, new BeanPropertyRowMapper<>(Product.class), product.getProductId());
+    
+        if (products.size() == 0) {
+            // Product does not exist, insert a new row
+            int rowsAffected = jdbcTemplate.update(SQL_ADD_NEW_PRODUCT, product.getProductName(), product.getProductDescription(), product.getProductDiscountedPrice(), product.getProductActualPrice());
+            if (rowsAffected == 0) {
+                throw new SQLException("Creating product failed, no rows affected.");
+            }
+        } else {
+            // Product exists, update the row
+            int rowsAffected = jdbcTemplate.update(SQL_UPDATE_PRODUCT, product.getProductName(), product.getProductDescription(), product.getProductDiscountedPrice(), product.getProductActualPrice(), product.getProductId());
+            if (rowsAffected == 0) {
+                throw new SQLException("Updating product failed, no rows affected.");
+            }
+    
+            // Delete all existing image entries for the product
+            jdbcTemplate.update("DELETE FROM product_images WHERE product_id=?", product.getProductId());
+    
+            // Delete all image entries that are not associated with any product
+            jdbcTemplate.update("DELETE FROM image_model WHERE id NOT IN (SELECT DISTINCT image_id FROM product_images)");
         }
-
-        //Product image save part
-        // Retrieve the product_id of the newly added product
-        // gives invalid column name error but can ignore
-        Long productId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Long.class);
-
+    
+        // Retrieve the product_id of the newly added/updated product
+        Integer intProductId = product.getProductId();
+        Long productId = intProductId.longValue();
+        if (productId == null) {
+            productId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Long.class);
+        }
+    
         // Save each image to image_model table and add relation between product and image in product_images table
         for (ImageModel image : product.getProductImages()) {
             jdbcTemplate.update("INSERT INTO image_model (name, type, picByte) VALUES (?, ?, ?)", image.getName(), image.getType(), image.getPicByte());
-
-            // gives invalid column name error but can ignore
+    
             Long imageId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Long.class);
-
+    
             jdbcTemplate.update("INSERT INTO product_images (product_id, image_id) VALUES (?, ?)", productId, imageId);
         }
-
-        //
-        SqlRowSet rs = jdbcTemplate.queryForRowSet(SQL_FIND_PRODUCT_BY_NAME, product.getProductName());
-        if (!rs.next())
-			// return Optional.empty();
+    
+        // Retrieve the newly added/updated product and return it
+        SqlRowSet rs = jdbcTemplate.queryForRowSet(SQL_FIND_PRODUCT_BY_ID, productId);
+        if (!rs.next()) {
             throw new SQLException("Creating product failed, no ID obtained.");
-		return Product.create(rs);
+        }
+        return Product.create(rs);
     }
-    // *** LATEST WORKING VERSION (END) ***
-
-
-
+    
+    
     // METHOD: FIND ALL PRODUCTS
     public List<Product> findAll() {
         String sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_discounted_price, " +
@@ -202,24 +233,6 @@ public class ProductRepository {
     }
     
     
-    
-    
-    
-    
-
-    
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-
-
     /*  *** Simple way only (Not in use) ***
         public List<Product> findAll() {
             return jdbcTemplate.query(SQL_FIND_ALL_PRODUCTS, BeanPropertyRowMapper.newInstance(Product.class));

@@ -106,5 +106,17 @@ public class Queries {
             JOIN role r ON ur.role_name = r.role_name
             WHERE u.user_name = ?
         """;
+
+    
+    // 
+    public static final String SQL_UPDATE_PRODUCT = """
+            UPDATE product SET product_name=?, product_description=?, product_discounted_price=?, product_actual_price=? WHERE product_id=?
+        """;
+
+    public static final String SQL_FIND_PRODUCT_BY_ID = """
+            SELECT * FROM product WHERE product_id=?
+        """;
+
+
     
 }
