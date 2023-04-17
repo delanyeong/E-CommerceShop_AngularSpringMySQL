@@ -86,6 +86,12 @@ public class ProductController {
         productSvc.deleteProductDetails(productId);
     }
 
+    @PreAuthorize("hasRole('User')")
+    @GetMapping(path="/getProductDetails/{isSingleProductCheckout}/{productId}")
+    public List<Product> getProductDetails(@PathVariable(name="isSingleProductCheckout") boolean isSingleProductCheckout, @PathVariable(name = "productId") Integer productId) throws SQLException {
+        return productSvc.getProductDetails(isSingleProductCheckout, productId);
+    }
+
 
     // NOT IN USE
     /* *** GIPHY template try only (Not in use) ***

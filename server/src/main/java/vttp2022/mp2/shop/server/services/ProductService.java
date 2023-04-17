@@ -2,6 +2,7 @@ package vttp2022.mp2.shop.server.services;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,21 @@ public class ProductService {
 
     public void deleteProductDetails(Integer productId) throws SQLException {
         productRepo.deleteById(productId);
+    }
+
+    public List<Product> getProductDetails (boolean isSingleProductCheckout, Integer productId) throws SQLException {
+        if (isSingleProductCheckout) {
+            // we are going to buy a single product
+
+            List<Product> list = new ArrayList<>();
+            Product product = productRepo.findById(productId);
+            list.add(product);
+            return list;
+        } else {
+            // we are going to checkout entire cart
+        }
+
+        return new ArrayList<>();
     }
 
 }
