@@ -78,9 +78,16 @@ public class ProductController {
     //     return productSvc.getAllProducts();
     // }
 
+    // @GetMapping(path="/getAllProducts")
+    // public List<Product> getAllProducts(@RequestParam(defaultValue="0") int pageNumber) {
+    //     return productSvc.getAllProducts(pageNumber);
+    // }
+
     @GetMapping(path="/getAllProducts")
-    public List<Product> getAllProducts(@RequestParam(defaultValue="0") int pageNumber) {
-        return productSvc.getAllProducts(pageNumber);
+    public List<Product> getAllProducts(@RequestParam(defaultValue="0") int pageNumber, @RequestParam(defaultValue = "") String searchKey) {
+        List<Product> result = productSvc.getAllProducts(pageNumber, searchKey);
+        System.out.println("Result size is "+ result.size());
+        return result;
     }
 
     @GetMapping({"/getProductDetailsById/{productId}"})

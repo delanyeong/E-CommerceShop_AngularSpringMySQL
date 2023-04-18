@@ -249,6 +249,89 @@ public class ProductRepository {
     
         return new PageImpl<>(list, PageRequest.of(currentPage, pageSize), products.size());
     }
+
+    // public List<Product> findByProductNameContainingIgnoreCaseOrProductDescriptionContainingIgnoreCase(
+    //     String key1, String key2, Pageable pageable) {
+    
+    //     String sql = "SELECT * FROM product WHERE LOWER(product_name) LIKE LOWER(?) OR LOWER(product_description) LIKE LOWER(?) LIMIT ? OFFSET ?";
+        
+    //     String searchKey1 = "%" + key1.toLowerCase() + "%";
+    //     String searchKey2 = "%" + key2.toLowerCase() + "%";
+    //     int limit = pageable.getPageSize();
+    //     int offset = Math.toIntExact(pageable.getOffset());
+
+    //     return jdbcTemplate.query(sql, ps -> {
+    //         ps.setString(1, searchKey1);
+    //         ps.setString(2, searchKey2);
+    //         ps.setInt(3, limit);
+    //         ps.setInt(4, offset);
+    //     }, (rs, rowNum) -> {
+    //         Product product = new Product();
+    //         product.setProductId(rs.getInt("product_id"));
+    //         product.setProductName(rs.getString("product_name"));
+    //         product.setProductDescription(rs.getString("product_description"));
+    //         product.setProductDiscountedPrice(rs.getDouble("product_discounted_price"));
+    //         product.setProductActualPrice(rs.getDouble("product_actual_price"));
+    //         return product;
+    //     });
+    // }
+
+    public Page<Product> findByProductNameContainingIgnoreCaseOrProductDescriptionContainingIgnoreCase(
+        String key1, String key2, Pageable pageable) {
+
+        String sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_discounted_price, " +
+                "p.product_actual_price, i.id, i.name, i.type, i.picByte " +
+                "FROM product p " +
+                "LEFT JOIN product_images pi ON p.product_id = pi.product_id " +
+                "LEFT JOIN image_model i ON pi.image_id = i.id " +
+                "WHERE LOWER(p.product_name) LIKE LOWER(?) OR LOWER(p.product_description) LIKE LOWER(?)";
+        
+        String searchKey1 = "%" + key1.toLowerCase() + "%";
+        String searchKey2 = "%" + key2.toLowerCase() + "%";
+        int limit = pageable.getPageSize();
+        // int offset = Math.toIntExact(pageable.getOffset());
+
+        List<Product> products = jdbcTemplate.query(sql, ps -> {
+            ps.setString(1, searchKey1);
+            ps.setString(2, searchKey2);
+        }, (rs, rowNum) -> {
+            Integer productId = rs.getInt("product_id");
+            Product product = new Product();
+            product.setProductId(productId);
+            product.setProductName(rs.getString("product_name"));
+            product.setProductDescription(rs.getString("product_description"));
+            product.setProductDiscountedPrice(rs.getDouble("product_discounted_price"));
+            product.setProductActualPrice(rs.getDouble("product_actual_price"));
+
+            product.setProductImages(new HashSet<>());
+
+            ImageModel image = new ImageModel();
+            image.setId(rs.getLong("id"));
+            image.setName(rs.getString("name"));
+            image.setType(rs.getString("type"));
+            image.setPicByte(rs.getBytes("picByte"));
+
+            product.getProductImages().add(image);
+
+            return product;
+        });
+        
+        int total = products.size();
+        int startItem = Math.toIntExact(pageable.getOffset());
+        int toIndex = Math.min(startItem + limit, total);
+        List<Product> list;
+        
+        if (startItem >= products.size()) {
+            list = Collections.emptyList();
+        } else {
+            list = products.subList(startItem, toIndex);
+        }
+
+        return new PageImpl<>(list, PageRequest.of(pageable.getPageNumber(), limit), total);
+    }
+
+
+
     
 
     public void deleteById(Integer productId) throws SQLException {

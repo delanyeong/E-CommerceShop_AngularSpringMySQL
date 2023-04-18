@@ -29,10 +29,21 @@ public class ProductService {
     //     return productRepo.findAll();
     // }
 
-    public List<Product> getAllProducts(int pageNumber) {
+    // public List<Product> getAllProducts(int pageNumber) {
+    //     Pageable pageable = PageRequest.of(pageNumber, 12);
+    //     Page<Product> page = productRepo.findAll(pageable);
+    //     return page.getContent();
+    // }
+
+    public List<Product> getAllProducts(int pageNumber, String searchKey) {
         Pageable pageable = PageRequest.of(pageNumber, 12);
-        Page<Product> page = productRepo.findAll(pageable);
-        return page.getContent();
+        if(searchKey.equals("")) {
+            Page<Product> page = productRepo.findAll(pageable);
+            return page.getContent();
+        } else {
+            return productRepo.findByProductNameContainingIgnoreCaseOrProductDescriptionContainingIgnoreCase(searchKey, searchKey, pageable).getContent();
+        }
+        
     }
 
     public Product getProductDetailsById(Integer productId) throws SQLException, IOException {
