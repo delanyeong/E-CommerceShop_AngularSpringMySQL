@@ -14,8 +14,12 @@ export class ProductService {
     return this.http.post<Product>("http://localhost:8080/addNewProduct", product);
   }
 
-  public getAllProducts () {
-    return this. http.get<Product[]>("http://localhost:8080/getAllProducts");
+  // public getAllProducts () {
+  //   return this. http.get<Product[]>("http://localhost:8080/getAllProducts");
+  // }
+
+  public getAllProducts (pageNumber:any) {
+    return this. http.get<Product[]>("http://localhost:8080/getAllProducts?pageNumber=" + pageNumber);
   }
 
   public getProductDetailsById(productId:any) {

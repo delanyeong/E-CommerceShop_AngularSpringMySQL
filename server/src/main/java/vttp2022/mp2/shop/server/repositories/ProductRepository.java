@@ -2,6 +2,10 @@ package vttp2022.mp2.shop.server.repositories;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -18,6 +22,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -79,6 +84,29 @@ public class ProductRepository {
             if (rowsAffected == 0) {
                 throw new SQLException("Creating product failed, no rows affected.");
             }
+
+            //Product image save part
+            // Retrieve the product_id of the newly added product
+            // gives invalid column name error but can ignore
+            Long productId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Long.class);
+
+            // Save each image to image_model table and add relation between product and image in product_images table
+            for (ImageModel image : product.getProductImages()) {
+                jdbcTemplate.update("INSERT INTO image_model (name, type, picByte) VALUES (?, ?, ?)", image.getName(), image.getType(), image.getPicByte());
+
+                // gives invalid column name error but can ignore
+                Long imageId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Long.class);
+
+                jdbcTemplate.update("INSERT INTO product_images (product_id, image_id) VALUES (?, ?)", productId, imageId);
+            }
+
+            //
+            SqlRowSet rs = jdbcTemplate.queryForRowSet(SQL_FIND_PRODUCT_BY_NAME, product.getProductName());
+            if (!rs.next())
+			    // return Optional.empty();
+                throw new SQLException("Creating product failed, no ID obtained.");
+		    return Product.create(rs);
+
         } else {
             // Product exists, update the row
             int rowsAffected = jdbcTemplate.update(SQL_UPDATE_PRODUCT, product.getProductName(), product.getProductDescription(), product.getProductDiscountedPrice(), product.getProductActualPrice(), product.getProductId());
@@ -118,23 +146,69 @@ public class ProductRepository {
     }
     
     
-    // METHOD: FIND ALL PRODUCTS
-    public List<Product> findAll() {
-        String sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_discounted_price, " +
-        "p.product_actual_price, i.id, i.name, i.type, i.picByte " +
-        "FROM product p " +
-        "LEFT JOIN product_images pi ON p.product_id = pi.product_id " +
-        "LEFT JOIN image_model i ON pi.image_id = i.id";
+    // METHOD: FIND ALL PRODUCTS - PREVIOUS WORKING VERSION
+    // public List<Product> findAll() {
+    //     String sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_discounted_price, " +
+    //     "p.product_actual_price, i.id, i.name, i.type, i.picByte " +
+    //     "FROM product p " +
+    //     "LEFT JOIN product_images pi ON p.product_id = pi.product_id " +
+    //     "LEFT JOIN image_model i ON pi.image_id = i.id";
         
+    //     List<Product> products = jdbcTemplate.query(sql, new ResultSetExtractor<List<Product>>() {
+    //         @Override
+    //         public List<Product> extractData(ResultSet rs) throws SQLException, DataAccessException {
+    //             Map<Integer, Product> productMap = new HashMap<>();
+                
+    //             while (rs.next()) {
+    //                 Integer productId = rs.getInt("product_id");
+    //                 Product product = productMap.get(productId);
+                    
+    //                 if (product == null) {
+    //                     product = new Product();
+    //                     product.setProductId(productId);
+    //                     product.setProductName(rs.getString("product_name"));
+    //                     product.setProductDescription(rs.getString("product_description"));
+    //                     product.setProductDiscountedPrice(rs.getDouble("product_discounted_price"));
+    //                     product.setProductActualPrice(rs.getDouble("product_actual_price"));
+                        
+    //                     product.setProductImages(new HashSet<>());
+                        
+    //                     productMap.put(productId, product);
+    //                 }
+                    
+    //                 ImageModel image = new ImageModel();
+    //                 image.setId(rs.getLong("id"));
+    //                 image.setName(rs.getString("name"));
+    //                 image.setType(rs.getString("type"));
+    //                 image.setPicByte(rs.getBytes("picByte"));
+                    
+    //                 product.getProductImages().add(image);
+    //             }
+                
+    //             return new ArrayList<>(productMap.values());
+    //         }
+    //     });
+        
+    //     return products;
+    // }
+
+    // LATEST WORKING VERSION
+    public Page<Product> findAll(Pageable pageable) {
+        String sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_discounted_price, " +
+                "p.product_actual_price, i.id, i.name, i.type, i.picByte " +
+                "FROM product p " +
+                "LEFT JOIN product_images pi ON p.product_id = pi.product_id " +
+                "LEFT JOIN image_model i ON pi.image_id = i.id";
+    
         List<Product> products = jdbcTemplate.query(sql, new ResultSetExtractor<List<Product>>() {
             @Override
             public List<Product> extractData(ResultSet rs) throws SQLException, DataAccessException {
                 Map<Integer, Product> productMap = new HashMap<>();
-                
+    
                 while (rs.next()) {
                     Integer productId = rs.getInt("product_id");
                     Product product = productMap.get(productId);
-                    
+    
                     if (product == null) {
                         product = new Product();
                         product.setProductId(productId);
@@ -142,27 +216,40 @@ public class ProductRepository {
                         product.setProductDescription(rs.getString("product_description"));
                         product.setProductDiscountedPrice(rs.getDouble("product_discounted_price"));
                         product.setProductActualPrice(rs.getDouble("product_actual_price"));
-                        
+    
                         product.setProductImages(new HashSet<>());
-                        
+    
                         productMap.put(productId, product);
                     }
-                    
+    
                     ImageModel image = new ImageModel();
                     image.setId(rs.getLong("id"));
                     image.setName(rs.getString("name"));
                     image.setType(rs.getString("type"));
                     image.setPicByte(rs.getBytes("picByte"));
-                    
+    
                     product.getProductImages().add(image);
                 }
-                
+    
                 return new ArrayList<>(productMap.values());
             }
         });
-        
-        return products;
+    
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<Product> list;
+    
+        if (products.size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, products.size());
+            list = products.subList(startItem, toIndex);
+        }
+    
+        return new PageImpl<>(list, PageRequest.of(currentPage, pageSize), products.size());
     }
+    
 
     public void deleteById(Integer productId) throws SQLException {
         // Get the IDs of the image models associated with the product being deleted
@@ -180,6 +267,8 @@ public class ProductRepository {
         if (rowsAffected == 0) {
             throw new SQLException("Deleting product failed, no rows affected.");
         }
+
+        //Known bug is that order_detail has record to product so cannot delete
     }
 
     public Product findById(Integer productId) throws SQLException {
@@ -228,5 +317,7 @@ public class ProductRepository {
     
         return product;
     }
+
+    
     
 }

@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+// import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import vttp2022.mp2.shop.server.models.Product;
@@ -21,8 +25,14 @@ public class ProductService {
         return productRepo.save(product);
     }
 
-    public List<Product> getAllProducts() {
-        return productRepo.findAll();
+    // public List<Product> getAllProducts() {
+    //     return productRepo.findAll();
+    // }
+
+    public List<Product> getAllProducts(int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, 12);
+        Page<Product> page = productRepo.findAll(pageable);
+        return page.getContent();
     }
 
     public Product getProductDetailsById(Integer productId) throws SQLException, IOException {
