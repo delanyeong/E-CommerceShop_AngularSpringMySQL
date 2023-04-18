@@ -11,13 +11,10 @@ import { UserService } from '../_services/user.service';
 })
 export class LoginComponent implements OnInit{
 
-  // loginForm!: FormGroup
-
   constructor(private userService: UserService, private userAuthService: UserAuthService, private router: Router) { }
 
   ngOnInit(): void {
-    // Build the form
-    // this.loginForm = this.createForm()
+    
   }
 
   process(loginForm : NgForm) {
@@ -39,12 +36,9 @@ export class LoginComponent implements OnInit{
     )
   }
 
-  // private createForm(): FormGroup {
-  //   return this.fb.group({
-  //     userName: this.fb.control<string>('', [ Validators.required, Validators.minLength(3) ]),
-  //     userPassword: this.fb.control<string>('', [ Validators.required, Validators.email ])
-  //   })
-  // }
+  registerUser() {
+    this.router.navigate(['/register']);
+  }
 
   
 
