@@ -45,6 +45,10 @@ export class ProductService {
   public addToCart(productId:any) {
     return this.http.get("http://localhost:8080/addToCart/" + productId);
   }
+
+  public getCartDetails() {
+    return this.http.get("http://localhost:8080/getCartDetails");
+  }
 }
 
 
