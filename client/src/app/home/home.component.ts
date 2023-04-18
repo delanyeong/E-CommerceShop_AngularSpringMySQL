@@ -30,6 +30,13 @@ export class HomeComponent implements OnInit {
     this.getAllProducts();
   }
 
+  searchByKeyword(searchkeyword:any) {
+    console.log(searchkeyword);
+    this.pageNumber = 0;
+    this.productDetails = [];
+    this.getAllProducts(searchkeyword);
+  }
+
   // public getAllProducts() {
   //   this.productSvc.getAllProducts()
   //   .pipe(
@@ -45,8 +52,29 @@ export class HomeComponent implements OnInit {
   //   );
   // }
 
-  public getAllProducts() {
-    this.productSvc.getAllProducts(this.pageNumber)
+  // public getAllProducts() {
+  //   this.productSvc.getAllProducts(this.pageNumber)
+  //   .pipe(
+  //     map((x: Product[], i) => x.map((product: Product) => this.imageProcessingService.createImages(product)))
+  //   )
+  //   .subscribe(
+  //     (resp: Product[]) => {
+  //       console.log (resp);
+  //       if(resp.length == 12) {
+  //         this.showLoadButton = true;
+  //       } else {
+  //         this.showLoadButton = false;
+  //       }
+  //       resp.forEach(p => this.productDetails.push(p));
+  //       // this.productDetails = resp;
+  //     }, (error: HttpErrorResponse) => {
+  //       console.log(error);
+  //     }
+  //   );
+  // }
+
+  public getAllProducts(searchKey: string = "") {
+    this.productSvc.getAllProducts(this.pageNumber, searchKey)
     .pipe(
       map((x: Product[], i) => x.map((product: Product) => this.imageProcessingService.createImages(product)))
     )

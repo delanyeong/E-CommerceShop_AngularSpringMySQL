@@ -15,11 +15,15 @@ export class ProductService {
   }
 
   // public getAllProducts () {
-  //   return this. http.get<Product[]>("http://localhost:8080/getAllProducts");
+  //   return this.http.get<Product[]>("http://localhost:8080/getAllProducts");
   // }
 
-  public getAllProducts (pageNumber:any) {
-    return this. http.get<Product[]>("http://localhost:8080/getAllProducts?pageNumber=" + pageNumber);
+  // public getAllProducts (pageNumber:any) {
+  //   return this.http.get<Product[]>("http://localhost:8080/getAllProducts?pageNumber=" + pageNumber);
+  // }
+
+  public getAllProducts (pageNumber:any, searchkeyword: string = "") {
+    return this.http.get<Product[]>("http://localhost:8080/getAllProducts?pageNumber=" + pageNumber + "&searchKey=" + searchkeyword);
   }
 
   public getProductDetailsById(productId:any) {
