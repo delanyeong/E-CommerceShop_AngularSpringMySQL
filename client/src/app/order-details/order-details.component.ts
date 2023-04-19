@@ -11,16 +11,29 @@ export class OrderDetailsComponent implements OnInit {
   dataSource = [];
   displayedColumns: string[] = ['Id', 'Product Name', 'Name', 'Address', 'Contact No.', 'Status', 'Action'];
 
+  status: string = "All";
+
   constructor(private productService: ProductService) {
 
   }
 
   ngOnInit(): void {
-    this.getAllOrderDetailsForAdmin();
+    this.getAllOrderDetailsForAdmin(this.status);
   }
 
-  getAllOrderDetailsForAdmin() {
-    this.productService.getAllOrderDetailsForAdmin().subscribe(
+  // getAllOrderDetailsForAdmin() {
+  //   this.productService.getAllOrderDetailsForAdmin().subscribe(
+  //     (resp:any) => {
+  //       this.dataSource = resp;
+  //       console.log(resp);
+  //     }, (error) => {
+  //       console.log(error);
+  //     }
+  //   )
+  // }
+
+  getAllOrderDetailsForAdmin(statusParameter: string) {
+    this.productService.getAllOrderDetailsForAdmin(statusParameter).subscribe(
       (resp:any) => {
         this.dataSource = resp;
         console.log(resp);
@@ -30,11 +43,23 @@ export class OrderDetailsComponent implements OnInit {
     )
   }
 
+  // markAsDelivered(orderId:any) {
+  //   console.log(orderId)
+  //   this.productService.markAsDelivered(orderId).subscribe(
+  //     (response) => {
+  //       this.getAllOrderDetailsForAdmin();
+  //       console.log(response);
+  //     }, (error) => {
+  //       console.log(error)
+  //     }
+  //   )
+  // }
+
   markAsDelivered(orderId:any) {
     console.log(orderId)
     this.productService.markAsDelivered(orderId).subscribe(
       (response) => {
-        this.getAllOrderDetailsForAdmin();
+        this.getAllOrderDetailsForAdmin(this.status);
         console.log(response);
       }, (error) => {
         console.log(error)

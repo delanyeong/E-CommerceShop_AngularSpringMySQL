@@ -1,6 +1,12 @@
 <div class="container mt-5">
 
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <mat-button-toggle-group  aria-label="Font Style">
+        <mat-button-toggle value="bold" (click)="getAllOrderDetailsForAdmin('All')">All</mat-button-toggle>
+        <mat-button-toggle value="italic" (click)="getAllOrderDetailsForAdmin('Placed')">Placed</mat-button-toggle>
+        <mat-button-toggle value="underline" (click)="getAllOrderDetailsForAdmin('Delivered')">Delivered</mat-button-toggle>
+      </mat-button-toggle-group>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 mt-3">
     
         <!--- Note that these columns can be defined in any order.
               The actual rendered columns are set as a property on the row definition" -->

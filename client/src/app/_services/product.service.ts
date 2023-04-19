@@ -16,8 +16,12 @@ export class ProductService {
     return this.http.get("http://localhost:8080/markOrderAsDelivered/" + orderId)
   }
 
-  public getAllOrderDetailsForAdmin() : Observable<MyOrderDetails []> {
-    return this.http.get<MyOrderDetails[]>("http://localhost:8080/getAllOrderDetails");
+  // public getAllOrderDetailsForAdmin() : Observable<MyOrderDetails []> {
+  //   return this.http.get<MyOrderDetails[]>("http://localhost:8080/getAllOrderDetails");
+  // }
+
+  public getAllOrderDetailsForAdmin(status: string) : Observable<MyOrderDetails []> {
+    return this.http.get<MyOrderDetails[]>("http://localhost:8080/getAllOrderDetails/" + status);
   }
 
   public getMyOrders() : Observable<MyOrderDetails []> {
