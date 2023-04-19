@@ -4,6 +4,9 @@ import { OrderDetails } from '../_model/order-details.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../_model/product.model';
 import { ProductService } from '../_services/product.service';
+// import * as Razorpay from 'razorpay';
+
+declare var Razorpay: any;
 
 @Component({
   selector: 'app-buy-product',
@@ -101,7 +104,57 @@ export class BuyProductComponent implements OnInit {
 
     return grandTotal
   }
+
+  createTransactionAndPlaceOrder(orderForm: NgForm) {
+    let amount = this.getCalculatedGrandTotal();
+    this.productSvc.createTransaction(amount).subscribe(
+      (response) => {
+        console.log(response);
+        this.openTransactionModal(response, orderForm);
+      }, (error) => {
+        console.log(error)
+      }
+    )
+
+  }
+
+  openTransactionModal(response: any, orderForm: NgForm) {
+    var options = {
+      order_id: response.orderId,
+      key: response.key,
+      amount: response.amount,
+      currency: response.currency,
+      name: 'VTTP',
+      description: 'Payment of online shopping',
+      image: 'https://cdn.pixabay.com/photo/2023/04/15/08/52/butterfly-7927279_640.jpg',
+      handler: (response: any) => {
+        if(response != null && response.razorpay_payment_id != null) {
+          this.processResponse(response, orderForm)
+        } else {
+          alert("Payment failed")
+        }
+      },
+      prefill: {
+        name: 'VTTP',
+        email: 'VTTP@GMAIL.COM',
+        contact: '1234567890'
+      },
+      notes: {
+        address: 'Online Shopping'
+      },
+      theme: {
+        color: '#F37254'
+      }
+
+    }
+
+    var razorPayObject = new Razorpay(options);
+    razorPayObject.open();
+  }
    
+  processResponse(resp:any, orderForm: NgForm) {
+    this.placeOrder(orderForm)
+  }
 
 
 

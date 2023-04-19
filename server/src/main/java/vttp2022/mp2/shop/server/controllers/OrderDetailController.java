@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vttp2022.mp2.shop.server.models.OrderDetail;
 import vttp2022.mp2.shop.server.models.OrderInput;
+import vttp2022.mp2.shop.server.models.TransactionDetails;
 import vttp2022.mp2.shop.server.services.OrderDetailService;
 import vttp2022.mp2.shop.server.services.ProductService;
 
@@ -57,6 +58,12 @@ public class OrderDetailController {
     @GetMapping(path="/markOrderAsDelivered/{orderId}")
     public void markOrderAsDelivered(@PathVariable(name="orderId") Integer orderId) {
         orderDetailService.markOrderAsDelivered(orderId);
+    }
+
+    @PreAuthorize("hasRole('User')")
+    @GetMapping(path="/createTransaction/{amount}")
+    public TransactionDetails createTransaction(@PathVariable (name = "amount") Double amount) {
+        return orderDetailService.createTransaction(amount);
     }
 
 }

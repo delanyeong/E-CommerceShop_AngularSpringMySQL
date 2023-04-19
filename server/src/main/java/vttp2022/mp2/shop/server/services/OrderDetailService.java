@@ -4,8 +4,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
 
 import vttp2022.mp2.shop.server.config.JwtRequestFilter;
 import vttp2022.mp2.shop.server.models.Cart;
@@ -13,6 +18,7 @@ import vttp2022.mp2.shop.server.models.OrderDetail;
 import vttp2022.mp2.shop.server.models.OrderInput;
 import vttp2022.mp2.shop.server.models.OrderProductQuantity;
 import vttp2022.mp2.shop.server.models.Product;
+import vttp2022.mp2.shop.server.models.TransactionDetails;
 import vttp2022.mp2.shop.server.models.User;
 import vttp2022.mp2.shop.server.repositories.CartRepository;
 import vttp2022.mp2.shop.server.repositories.OrderDetailRepository;
@@ -23,6 +29,10 @@ import vttp2022.mp2.shop.server.repositories.UserRepository;
 public class OrderDetailService {
 
     private static final String ORDER_PLACED = "Placed";
+
+    private static final String KEY = "rzp_test_6rfpzNihFBkGQR";
+    private static final String KEY_SECRET = "TMy9mICh9s5kd8Xl2EbImAxv";
+    private static final String CURRENCY = "SGD";
 
     @Autowired
     private OrderDetailRepository orderDetailRepo;
@@ -132,6 +142,35 @@ public class OrderDetailService {
             orderDetail.setOrderStatus("Delivered");
             orderDetailRepo.save(orderDetail);
         }
+    }
+
+    public TransactionDetails createTransaction (Double amount) {
+        
+        try {
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("amount", (amount * 100));
+            jsonObject.put("currency", CURRENCY);
+
+            RazorpayClient razorpayClient = new RazorpayClient(KEY, KEY_SECRET);
+            Order order = razorpayClient.orders.create(jsonObject);
+
+            TransactionDetails transactionDetails = prepareTransactionDetails(order);
+            return transactionDetails;
+            
+        } catch (RazorpayException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private TransactionDetails prepareTransactionDetails(Order order) {
+        String orderId = order.get("id");
+        String currency = order.get("currency");
+        Integer amount = order.get("amount");
+
+        TransactionDetails transactionDetails = new TransactionDetails(orderId, currency, amount, KEY);
+        return transactionDetails;
     }
     
 }
