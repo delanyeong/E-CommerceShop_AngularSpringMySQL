@@ -206,6 +206,12 @@ public class CartRepository {
             return carts;
         });
     }
+
+    public void deleteById(int cartId) {
+        String sql = "DELETE FROM cart WHERE cart_id = ?";
+        jdbcTemplate.update(sql, cartId);
+    }
+    
     
 
 //     CREATE TABLE `user` (

@@ -2,6 +2,7 @@ package vttp2022.mp2.shop.server.services;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,10 @@ public class CartService {
     @Autowired
     private UserRepository userRepo;
 
+    public void deleteCartItem(Integer cartId) {
+        cartRepo.deleteById(cartId);
+    }
+
 
     public Cart addToCart(Integer productId) throws SQLException {
         Product product = productRepo.findById(productId);
@@ -34,6 +39,13 @@ public class CartService {
         User user = null;
         if (username != null) {
             user = userRepo.findById(username).get();
+        }
+
+        List<Cart> cartList = cartRepo.findByUser(user);
+        List<Cart> filteredList = cartList.stream().filter(x -> x.getProduct().getProductId() == productId).collect(Collectors.toList());
+
+        if(filteredList.size() > 0) {
+            return null;
         }
 
         if (product != null && user != null) {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,12 @@ public class CartController {
     @GetMapping(path="/addToCart/{productId}")
     public Cart addToCart(@PathVariable(name="productId") Integer productId) throws SQLException {
         return cartSvc.addToCart(productId);
+    }
+
+    @PreAuthorize("hasRole('User')")
+    @DeleteMapping(path="/deleteCartItem/{cartId}")
+    public void deleteCartItem(@PathVariable(name = "cartId") Integer cartId) {
+        cartSvc.deleteCartItem(cartId);
     }
 
     @PreAuthorize("hasRole('User')")
