@@ -41,10 +41,16 @@ public class OrderDetailController {
         return orderDetailService.getOrderDetails();
     }
 
+    // @PreAuthorize("hasRole('Admin')")
+    // @GetMapping(path="/getAllOrderDetails")
+    // public List<OrderDetail> getAllOrderDetails() {
+    //     return orderDetailService.getAllOrderDetails();
+    // }
+
     @PreAuthorize("hasRole('Admin')")
-    @GetMapping(path="/getAllOrderDetails")
-    public List<OrderDetail> getAllOrderDetails() {
-        return orderDetailService.getAllOrderDetails();
+    @GetMapping(path="/getAllOrderDetails/{status}")
+    public List<OrderDetail> getAllOrderDetails(@PathVariable(name="status") String status) {
+        return orderDetailService.getAllOrderDetails(status);
     }
 
     @PreAuthorize("hasRole('Admin')")

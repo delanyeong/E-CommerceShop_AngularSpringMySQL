@@ -36,11 +36,27 @@ public class OrderDetailService {
     @Autowired
     private CartRepository cartRepo;
 
-    public List<OrderDetail> getAllOrderDetails() {
+    // public List<OrderDetail> getAllOrderDetails() {
+    //     List<OrderDetail> orderDetails = new ArrayList<>();
+    //     orderDetailRepo.findAll().forEach( 
+    //         x -> orderDetails.add(x)
+    //     );
+    //     return orderDetails;
+    // }
+
+    public List<OrderDetail> getAllOrderDetails(String status) {
         List<OrderDetail> orderDetails = new ArrayList<>();
-        orderDetailRepo.findAll().forEach( 
+
+        if(status.equals("All")) {
+            orderDetailRepo.findAll().forEach( 
             x -> orderDetails.add(x)
-        );
+            );
+        } else {
+            orderDetailRepo.findByOrderStatus(status).forEach(
+                x -> orderDetails.add(x)
+            );
+        }
+        
         return orderDetails;
     }
 
