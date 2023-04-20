@@ -121,7 +121,8 @@ public class OrderDetailService {
                 ORDER_PLACED,
                 product.getProductDiscountedPrice() * o.getQuantity(),
                 product,
-                user
+                user,
+                orderInput.getTransactionId()
             );
 
 

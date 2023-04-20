@@ -23,6 +23,7 @@ export class BuyProductComponent implements OnInit {
     fullAddress: '',
     contactNumber: '',
     alternateContactNumber: '',
+    transactionId: '',
     orderProductQuantityList: []
   }
 
@@ -153,6 +154,7 @@ export class BuyProductComponent implements OnInit {
   }
    
   processResponse(resp:any, orderForm: NgForm) {
+    this.orderDetails.transactionId = resp.razorpay_payment_id
     this.placeOrder(orderForm)
   }
 

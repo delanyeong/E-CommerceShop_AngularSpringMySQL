@@ -12,6 +12,7 @@ public class OrderDetail {
 
     private Product product;
     private User user;
+    private String transactionId;
 
     
 
@@ -19,8 +20,20 @@ public class OrderDetail {
     }
 
 
+    // public OrderDetail(String orderFullName, String orderFullOrder, String orderContactNumber,
+    //         String orderAlternateContactNumber, String orderStatus, Double orderAmount, Product product, User user) {
+    //     this.orderFullName = orderFullName;
+    //     this.orderFullOrder = orderFullOrder;
+    //     this.orderContactNumber = orderContactNumber;
+    //     this.orderAlternateContactNumber = orderAlternateContactNumber;
+    //     this.orderStatus = orderStatus;
+    //     this.orderAmount = orderAmount;
+    //     this.product = product;
+    //     this.user = user;
+    // }
+
     public OrderDetail(String orderFullName, String orderFullOrder, String orderContactNumber,
-            String orderAlternateContactNumber, String orderStatus, Double orderAmount, Product product, User user) {
+            String orderAlternateContactNumber, String orderStatus, Double orderAmount, Product product, User user, String transactionId) {
         this.orderFullName = orderFullName;
         this.orderFullOrder = orderFullOrder;
         this.orderContactNumber = orderContactNumber;
@@ -29,7 +42,10 @@ public class OrderDetail {
         this.orderAmount = orderAmount;
         this.product = product;
         this.user = user;
+        this.transactionId = transactionId;
     }
+
+
 
     
     public Product getProduct() { return product; }
@@ -58,6 +74,16 @@ public class OrderDetail {
 
     public Double getOrderAmount() { return orderAmount; }
     public void setOrderAmount(Double orderAmount) { this.orderAmount = orderAmount;}
+
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
 
     
 

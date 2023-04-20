@@ -8,7 +8,10 @@ public class OrderInput {
     private String fullAddress;
     private String contactNumber;
     private String alternateContactNumber;
+    private String transactionId;
     private List<OrderProductQuantity> orderProductQuantityList;
+
+    
 
     public String getFullName() { return fullName;}
     public void setFullName(String fullName) {this.fullName = fullName;}
@@ -24,6 +27,14 @@ public class OrderInput {
     
     public List<OrderProductQuantity> getOrderProductQuantityList() { return orderProductQuantityList;}
     public void setOrderProductQuantityList(List<OrderProductQuantity> orderProductQuantityList) {this.orderProductQuantityList = orderProductQuantityList;}
+
+    
+    public String getTransactionId() {
+        return transactionId;
+    }
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
 
     
 

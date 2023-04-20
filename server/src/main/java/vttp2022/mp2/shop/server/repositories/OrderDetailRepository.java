@@ -38,21 +38,21 @@ public void save(OrderDetail orderDetail) {
     if (orderDetail.getOrderId() == null) {
         // Insert a new row
         String sql = "INSERT INTO order_detail (order_full_name, order_full_order, order_contact_number, " +
-                 "order_alternate_contact_number, order_status, order_amount, product_id, user_name) " +
-                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                 "order_alternate_contact_number, order_status, order_amount, product_id, user_name, transaction_id) " +
+                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, orderDetail.getOrderFullName(), orderDetail.getOrderFullOrder(),
                          orderDetail.getOrderContactNumber(), orderDetail.getOrderAlternateContactNumber(),
                          orderDetail.getOrderStatus(), orderDetail.getOrderAmount(), orderDetail.getProduct().getProductId(),
-                         orderDetail.getUser().getUserName());
+                         orderDetail.getUser().getUserName(), orderDetail.getTransactionId());
     } else {
         // Update an existing row
         String sql = "UPDATE order_detail SET order_full_name=?, order_full_order=?, order_contact_number=?, " +
-                 "order_alternate_contact_number=?, order_status=?, order_amount=?, product_id=?, user_name=? " +
+                 "order_alternate_contact_number=?, order_status=?, order_amount=?, product_id=?, user_name=?, transaction_id=? " +
                  "WHERE order_id=?";
         jdbcTemplate.update(sql, orderDetail.getOrderFullName(), orderDetail.getOrderFullOrder(),
                          orderDetail.getOrderContactNumber(), orderDetail.getOrderAlternateContactNumber(),
                          orderDetail.getOrderStatus(), orderDetail.getOrderAmount(), orderDetail.getProduct().getProductId(),
-                         orderDetail.getUser().getUserName(), orderDetail.getOrderId());
+                         orderDetail.getUser().getUserName(), orderDetail.getTransactionId(), orderDetail.getOrderId());
     }
 }
 
