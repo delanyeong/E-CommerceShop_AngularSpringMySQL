@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import vttp2022.mp2.shop.server.models.OrderDetail;
 import vttp2022.mp2.shop.server.models.OrderInput;
 import vttp2022.mp2.shop.server.models.TransactionDetails;
+// import vttp2022.mp2.shop.server.services.GMailer;
+import vttp2022.mp2.shop.server.services.MailService;
 import vttp2022.mp2.shop.server.services.OrderDetailService;
 import vttp2022.mp2.shop.server.services.ProductService;
 
@@ -22,6 +24,9 @@ public class OrderDetailController {
     
     @Autowired
     private OrderDetailService orderDetailService;
+
+    @Autowired
+    private MailService mailSvc;
 
 
     // @PreAuthorize("hasRole('User')")
@@ -62,7 +67,8 @@ public class OrderDetailController {
 
     @PreAuthorize("hasRole('User')")
     @GetMapping(path="/createTransaction/{amount}")
-    public TransactionDetails createTransaction(@PathVariable (name = "amount") Double amount) {
+    public TransactionDetails createTransaction(@PathVariable (name = "amount") Double amount) throws Exception {
+        mailSvc.sendMail("codesignalrocks@gmail.com", "Order Confirmed", "Order Confirmed");
         return orderDetailService.createTransaction(amount);
     }
 
