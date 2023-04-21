@@ -13,11 +13,11 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
   public createTransaction(amount:any) {
-    return this.http.get("http://localhost:8080/createTransaction/" + amount)
+    return this.http.get("/createTransaction/" + amount)
   }
 
   public markAsDelivered(orderId:any) {
-    return this.http.get("http://localhost:8080/markOrderAsDelivered/" + orderId)
+    return this.http.get("/markOrderAsDelivered/" + orderId)
   }
 
   // public getAllOrderDetailsForAdmin() : Observable<MyOrderDetails []> {
@@ -25,19 +25,19 @@ export class ProductService {
   // }
 
   public getAllOrderDetailsForAdmin(status: string) : Observable<MyOrderDetails []> {
-    return this.http.get<MyOrderDetails[]>("http://localhost:8080/getAllOrderDetails/" + status);
+    return this.http.get<MyOrderDetails[]>("/getAllOrderDetails/" + status);
   }
 
   public getMyOrders() : Observable<MyOrderDetails []> {
-    return this.http.get<MyOrderDetails[]>("http://localhost:8080/getOrderDetails");
+    return this.http.get<MyOrderDetails[]>("/getOrderDetails");
   }
 
   public deleteCartItem(cartId:any) {
-    return this.http.delete("http://localhost:8080/deleteCartItem/" + cartId)
+    return this.http.delete("/deleteCartItem/" + cartId)
   }
 
   public addProduct(product: FormData) {
-    return this.http.post<Product>("http://localhost:8080/addNewProduct", product);
+    return this.http.post<Product>("/addNewProduct", product);
   }
 
   // public getAllProducts () {
@@ -49,19 +49,19 @@ export class ProductService {
   // }
 
   public getAllProducts (pageNumber:any, searchkeyword: string = "") {
-    return this.http.get<Product[]>("http://localhost:8080/getAllProducts?pageNumber=" + pageNumber + "&searchKey=" + searchkeyword);
+    return this.http.get<Product[]>("/getAllProducts?pageNumber=" + pageNumber + "&searchKey=" + searchkeyword);
   }
 
   public getProductDetailsById(productId:any) {
-    return this.http.get<Product>("http://localhost:8080/getProductDetailsById/" + productId);
+    return this.http.get<Product>("/getProductDetailsById/" + productId);
   }
 
   public deleteProduct(productId: number) {
-    return this.http.delete("http://localhost:8080/deleteProductDetails/" + productId);
+    return this.http.delete("/deleteProductDetails/" + productId);
   }
 
   public getProductDetails(isSingleProductCheckout:any, productId:any) {
-    return this.http.get<Product[]>("http://localhost:8080/getProductDetails/" + isSingleProductCheckout + "/" + productId);
+    return this.http.get<Product[]>("/getProductDetails/" + isSingleProductCheckout + "/" + productId);
   }
 
   // public placeOrder(orderDetails: OrderDetails) {
@@ -69,15 +69,15 @@ export class ProductService {
   // }
 
   public placeOrder(orderDetails: OrderDetails, isCartCheckout:any) {
-    return this.http.post("http://localhost:8080/placeOrder/"+ isCartCheckout, orderDetails)
+    return this.http.post("/placeOrder/"+ isCartCheckout, orderDetails)
   }
 
   public addToCart(productId:any) {
-    return this.http.get("http://localhost:8080/addToCart/" + productId);
+    return this.http.get("/addToCart/" + productId);
   }
 
   public getCartDetails() {
-    return this.http.get("http://localhost:8080/getCartDetails");
+    return this.http.get("/getCartDetails");
   }
 }
 

@@ -40,7 +40,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors();
         httpSecurity.csrf().disable()
-            .authorizeRequests().antMatchers("/authenticate","/registerNewUser", "/getAllProducts", "/getProductDetailsById/{productId}").permitAll()
+            .authorizeRequests().antMatchers("/","/polyfills.4709fd955acb2242.js","/main.6c93c38e6fd754b5.js", "/runtime.7ae29a296d479790.js","/scripts.9d6e4750e284b06c.js","/favicon.ico", "/styles.8fe8188d8e91e134.css", "/authenticate","/registerNewUser", "/getAllProducts", "/getProductDetailsById/{productId}").permitAll()
             .antMatchers(HttpHeaders.ALLOW).permitAll()
             .anyRequest().authenticated()
             .and()
@@ -60,6 +60,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(jwtService).passwordEncoder(passwordEncoder());
     }
+
+    
 
     
 }

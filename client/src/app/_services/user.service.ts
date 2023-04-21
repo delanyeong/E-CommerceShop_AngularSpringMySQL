@@ -16,19 +16,19 @@ export class UserService {
   constructor(private http: HttpClient, private userAuthService: UserAuthService) { }
 
   public register(registerData: any) {
-    return this.http.post(this.PATH_OF_API + '/registerNewUser', registerData)
+    return this.http.post('/registerNewUser', registerData)
   }
 
   public login(loginData: any) {
-    return this.http.post(this.PATH_OF_API + "/authenticate", loginData, { headers: this.requestHeader})
+    return this.http.post("/authenticate", loginData, { headers: this.requestHeader})
   }
 
   public forUser() {
-    return this.http.get(this.PATH_OF_API + '/forUser', {responseType:"text"});
+    return this.http.get('/forUser', {responseType:"text"});
   }
 
   public forAdmin() {
-    return this.http.get(this.PATH_OF_API + '/forAdmin', {responseType:"text"});
+    return this.http.get('/forAdmin', {responseType:"text"});
   }
 
   public roleMatch(allowedRoles:any) : boolean {
