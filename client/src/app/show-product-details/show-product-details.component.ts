@@ -38,42 +38,14 @@ export class ShowProductDetailsComponent implements OnInit {
     this.getAllProducts(searchkeyword);
   }
 
-  // public getAllProducts() {
-  //   this.showTable = false;
-  //   // this.productService.getAllProducts()
-  //   this.productService.getAllProducts(this.pageNumber)
-  //   .pipe(
-  //     map((x: Product[], i) => x.map((product: Product) => this.imageProcessingService.createImages(product)))
-  //   )
-  //   .subscribe(
-  //     (resp: Product[]) => {
-  //       // console.log (resp);
-  //       resp.forEach(product => this.productDetails.push(product))
-  //       this.showTable = true;
-
-  //       if(resp.length == 12 ) {
-  //         this.showLoadMoreProductButton = true;
-  //       } else {
-  //         this.showLoadMoreProductButton = false;
-  //       }
-
-  //       // this.productDetails = resp;
-  //     }, (error: HttpErrorResponse) => {
-  //       console.log(error);
-  //     }
-  //   );
-  // }
-
   public getAllProducts(searchKeyword: string = "") {
     this.showTable = false;
-    // this.productService.getAllProducts()
     this.productService.getAllProducts(this.pageNumber, searchKeyword)
     .pipe(
       map((x: Product[], i) => x.map((product: Product) => this.imageProcessingService.createImages(product)))
     )
     .subscribe(
       (resp: Product[]) => {
-        // console.log (resp);
         resp.forEach(product => this.productDetails.push(product))
         this.showTable = true;
 
@@ -82,8 +54,6 @@ export class ShowProductDetailsComponent implements OnInit {
         } else {
           this.showLoadMoreProductButton = false;
         }
-
-        // this.productDetails = resp;
       }, (error: HttpErrorResponse) => {
         console.log(error);
       }

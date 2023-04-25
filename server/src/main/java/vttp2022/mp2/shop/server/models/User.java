@@ -1,6 +1,5 @@
 package vttp2022.mp2.shop.server.models;
 
-import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 

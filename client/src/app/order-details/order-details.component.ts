@@ -21,17 +21,6 @@ export class OrderDetailsComponent implements OnInit {
     this.getAllOrderDetailsForAdmin(this.status);
   }
 
-  // getAllOrderDetailsForAdmin() {
-  //   this.productService.getAllOrderDetailsForAdmin().subscribe(
-  //     (resp:any) => {
-  //       this.dataSource = resp;
-  //       console.log(resp);
-  //     }, (error) => {
-  //       console.log(error);
-  //     }
-  //   )
-  // }
-
   getAllOrderDetailsForAdmin(statusParameter: string) {
     this.productService.getAllOrderDetailsForAdmin(statusParameter).subscribe(
       (resp:any) => {
@@ -42,18 +31,6 @@ export class OrderDetailsComponent implements OnInit {
       }
     )
   }
-
-  // markAsDelivered(orderId:any) {
-  //   console.log(orderId)
-  //   this.productService.markAsDelivered(orderId).subscribe(
-  //     (response) => {
-  //       this.getAllOrderDetailsForAdmin();
-  //       console.log(response);
-  //     }, (error) => {
-  //       console.log(error)
-  //     }
-  //   )
-  // }
 
   markAsDelivered(orderId:any) {
     console.log(orderId)

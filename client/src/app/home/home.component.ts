@@ -26,7 +26,6 @@ export class HomeComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    // this.getAllProducts();
     this.getAllProducts();
   }
 
@@ -36,42 +35,6 @@ export class HomeComponent implements OnInit {
     this.productDetails = [];
     this.getAllProducts(searchkeyword);
   }
-
-  // public getAllProducts() {
-  //   this.productSvc.getAllProducts()
-  //   .pipe(
-  //     map((x: Product[], i) => x.map((product: Product) => this.imageProcessingService.createImages(product)))
-  //   )
-  //   .subscribe(
-  //     (resp: Product[]) => {
-  //       console.log (resp);
-  //       this.productDetails = resp;
-  //     }, (error: HttpErrorResponse) => {
-  //       console.log(error);
-  //     }
-  //   );
-  // }
-
-  // public getAllProducts() {
-  //   this.productSvc.getAllProducts(this.pageNumber)
-  //   .pipe(
-  //     map((x: Product[], i) => x.map((product: Product) => this.imageProcessingService.createImages(product)))
-  //   )
-  //   .subscribe(
-  //     (resp: Product[]) => {
-  //       console.log (resp);
-  //       if(resp.length == 12) {
-  //         this.showLoadButton = true;
-  //       } else {
-  //         this.showLoadButton = false;
-  //       }
-  //       resp.forEach(p => this.productDetails.push(p));
-  //       // this.productDetails = resp;
-  //     }, (error: HttpErrorResponse) => {
-  //       console.log(error);
-  //     }
-  //   );
-  // }
 
   public getAllProducts(searchKey: string = "") {
     this.productSvc.getAllProducts(this.pageNumber, searchKey)
@@ -87,7 +50,6 @@ export class HomeComponent implements OnInit {
           this.showLoadButton = false;
         }
         resp.forEach(p => this.productDetails.push(p));
-        // this.productDetails = resp;
       }, (error: HttpErrorResponse) => {
         console.log(error);
       }

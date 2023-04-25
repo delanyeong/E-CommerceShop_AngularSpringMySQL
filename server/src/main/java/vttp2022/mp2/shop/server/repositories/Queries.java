@@ -95,10 +95,6 @@ public class Queries {
             VALUES (?, ?) 
         """;
 
-    // public static final String SQL_FIND_USER_BY_USERNAME = """
-    //         select * from user where user_name = ?
-    //     """;
-
     public static final String SQL_FIND_USERNAME = """
             SELECT u.user_name, u.user_first_name, u.user_last_name, u.user_password, r.role_name, r.role_description
             FROM user u

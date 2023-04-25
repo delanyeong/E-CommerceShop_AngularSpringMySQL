@@ -45,19 +45,6 @@ export class BuyProductComponent implements OnInit {
     console.log(this.orderDetails)
   }
 
-  // public placeOrder (orderForm: NgForm) {
-  //   this.productSvc.placeOrder(this.orderDetails).subscribe(
-  //     (resp) => {
-  //       console.log(resp);
-  //       orderForm.reset();
-  //       this.router.navigate(["/orderConfirm"])
-  //     },
-  //     (err) => {
-  //       console.log(err);
-  //     }
-  //   )
-  // }
-
   public placeOrder (orderForm: NgForm) {
     this.productSvc.placeOrder(this.orderDetails, this.isSingleProductCheckout).subscribe(
       (resp) => {

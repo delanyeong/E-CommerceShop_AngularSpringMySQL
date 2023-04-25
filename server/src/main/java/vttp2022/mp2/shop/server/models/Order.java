@@ -9,16 +9,12 @@ public class Order {
 	private Integer uid;
 	private Integer quantity;
 	private String date;
-    //
-    // private String orderId;
-	// private String deliveryId;
 	private String name;
 	private String address;
 	private String email;
-	// private String status;
+
 	private Date orderDate = new Date();
 	private List<Product> lineItems = new LinkedList<>();
-
 
     public Integer getOrderId() { return orderId; }
     public void setOrderId(Integer orderId) { this.orderId = orderId; }

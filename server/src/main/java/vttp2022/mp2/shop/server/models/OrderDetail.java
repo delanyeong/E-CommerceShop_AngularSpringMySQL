@@ -8,29 +8,13 @@ public class OrderDetail {
     private String orderAlternateContactNumber;
     private String orderStatus;
     private Double orderAmount;
-
-
     private Product product;
     private User user;
     private String transactionId;
 
-    
 
     public OrderDetail() {
     }
-
-
-    // public OrderDetail(String orderFullName, String orderFullOrder, String orderContactNumber,
-    //         String orderAlternateContactNumber, String orderStatus, Double orderAmount, Product product, User user) {
-    //     this.orderFullName = orderFullName;
-    //     this.orderFullOrder = orderFullOrder;
-    //     this.orderContactNumber = orderContactNumber;
-    //     this.orderAlternateContactNumber = orderAlternateContactNumber;
-    //     this.orderStatus = orderStatus;
-    //     this.orderAmount = orderAmount;
-    //     this.product = product;
-    //     this.user = user;
-    // }
 
     public OrderDetail(String orderFullName, String orderFullOrder, String orderContactNumber,
             String orderAlternateContactNumber, String orderStatus, Double orderAmount, Product product, User user, String transactionId) {
@@ -46,8 +30,6 @@ public class OrderDetail {
     }
 
 
-
-    
     public Product getProduct() { return product; }
     public void setProduct(Product product) {this.product = product;}
 
@@ -75,15 +57,8 @@ public class OrderDetail {
     public Double getOrderAmount() { return orderAmount; }
     public void setOrderAmount(Double orderAmount) { this.orderAmount = orderAmount;}
 
-
-    public String getTransactionId() {
-        return transactionId;
-    }
-
-
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
-    }
+    public String getTransactionId() { return transactionId;}
+    public void setTransactionId(String transactionId) {this.transactionId = transactionId;}
 
     
 

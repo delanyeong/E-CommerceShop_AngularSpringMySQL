@@ -46,13 +46,6 @@ public class OrderDetailService {
     @Autowired
     private CartRepository cartRepo;
 
-    // public List<OrderDetail> getAllOrderDetails() {
-    //     List<OrderDetail> orderDetails = new ArrayList<>();
-    //     orderDetailRepo.findAll().forEach( 
-    //         x -> orderDetails.add(x)
-    //     );
-    //     return orderDetails;
-    // }
 
     public List<OrderDetail> getAllOrderDetails(String status) {
         List<OrderDetail> orderDetails = new ArrayList<>();
@@ -77,32 +70,6 @@ public class OrderDetailService {
         return orderDetailRepo.findByUser(user);
     }
 
-    // public void placeOrder(OrderInput orderInput) throws SQLException {
-    //     List<OrderProductQuantity> productQuantityList = orderInput.getOrderProductQuantityList();
-
-    //     for (OrderProductQuantity o : productQuantityList) {
-    //         Product product = productRepo.findById(o.getProductId());
-
-    //         String currentUser = JwtRequestFilter.CURRENT_USER;
-    //         User user = userRepo.findById(currentUser).get();
-
-    //         OrderDetail orderDetail = new OrderDetail(
-    //             orderInput.getFullName(),
-    //             orderInput.getFullAddress(),
-    //             orderInput.getContactNumber(),
-    //             orderInput.getAlternateContactNumber(),
-    //             ORDER_PLACED,
-    //             product.getProductDiscountedPrice() * o.getQuantity(),
-    //             product,
-    //             user
-    //         );
-
-
-    //         //empty the cart
-
-    //         orderDetailRepo.save(orderDetail);
-    //     }
-    // } 
 
     public void placeOrder(OrderInput orderInput, boolean isSingleProductCheckout) throws SQLException {
         List<OrderProductQuantity> productQuantityList = orderInput.getOrderProductQuantityList();

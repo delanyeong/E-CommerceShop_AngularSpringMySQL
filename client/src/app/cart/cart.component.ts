@@ -50,13 +50,7 @@ export class CartComponent implements OnInit {
         isSingleProductCheckout: false, id: 0
       }])
     
-    // this.productService.getProductDetails(false, 0).subscribe(
-    //   (resp) => {
-    //     console.log(resp)
-    //   }, (error) => {
-    //     console.log(error)
-    //   }
-    // )
+    
   }
 
 }

@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import vttp2022.mp2.shop.server.models.OrderDetail;
 import vttp2022.mp2.shop.server.models.OrderInput;
 import vttp2022.mp2.shop.server.models.TransactionDetails;
-// import vttp2022.mp2.shop.server.services.GMailer;
 import vttp2022.mp2.shop.server.services.MailService;
 import vttp2022.mp2.shop.server.services.OrderDetailService;
-import vttp2022.mp2.shop.server.services.ProductService;
 
 @RestController
 public class OrderDetailController {
@@ -27,13 +25,6 @@ public class OrderDetailController {
 
     @Autowired
     private MailService mailSvc;
-
-
-    // @PreAuthorize("hasRole('User')")
-    // @PostMapping(path="/placeOrder")
-    // public void placeOrder(@RequestBody OrderInput orderInput) throws SQLException {
-    //     orderDetailService.placeOrder(orderInput);
-    // }
 
     @PreAuthorize("hasRole('User')")
     @PostMapping(path="/placeOrder/{isSingleProductCheckout}")
@@ -46,12 +37,6 @@ public class OrderDetailController {
     public List<OrderDetail> getOrderDetails() {
         return orderDetailService.getOrderDetails();
     }
-
-    // @PreAuthorize("hasRole('Admin')")
-    // @GetMapping(path="/getAllOrderDetails")
-    // public List<OrderDetail> getAllOrderDetails() {
-    //     return orderDetailService.getAllOrderDetails();
-    // }
 
     @PreAuthorize("hasRole('Admin')")
     @GetMapping(path="/getAllOrderDetails/{status}")

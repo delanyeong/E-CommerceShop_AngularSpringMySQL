@@ -35,42 +35,6 @@ public class ProductRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-
-
-    // METHOD: SAVE PRODUCT
-    // PREVIOUS WORKING VERSION
-    // public Product save(Product product) throws SQLException, IOException {
-
-    //     //Product details save part
-    //     int rowsAffected = jdbcTemplate.update(SQL_ADD_NEW_PRODUCT, product.getProductName(), product.getProductDescription(), product.getProductDiscountedPrice(), product.getProductActualPrice());
-
-    //     if (rowsAffected == 0) {
-    //         throw new SQLException("Creating product failed, no rows affected.");
-    //     }
-
-    //     //Product image save part
-    //     // Retrieve the product_id of the newly added product
-    //     // gives invalid column name error but can ignore
-    //     Long productId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Long.class);
-
-    //     // Save each image to image_model table and add relation between product and image in product_images table
-    //     for (ImageModel image : product.getProductImages()) {
-    //         jdbcTemplate.update("INSERT INTO image_model (name, type, picByte) VALUES (?, ?, ?)", image.getName(), image.getType(), image.getPicByte());
-
-    //         // gives invalid column name error but can ignore
-    //         Long imageId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Long.class);
-
-    //         jdbcTemplate.update("INSERT INTO product_images (product_id, image_id) VALUES (?, ?)", productId, imageId);
-    //     }
-
-    //     //
-    //     SqlRowSet rs = jdbcTemplate.queryForRowSet(SQL_FIND_PRODUCT_BY_NAME, product.getProductName());
-    //     if (!rs.next())
-	// 		// return Optional.empty();
-    //         throw new SQLException("Creating product failed, no ID obtained.");
-	// 	return Product.create(rs);
-    // }
-
     // LATEST WORKING VERSION
     public Product save(Product product) throws SQLException, IOException {
 
@@ -145,52 +109,6 @@ public class ProductRepository {
         return Product.create(rs);
     }
     
-    
-    // METHOD: FIND ALL PRODUCTS - PREVIOUS WORKING VERSION
-    // public List<Product> findAll() {
-    //     String sql = "SELECT p.product_id, p.product_name, p.product_description, p.product_discounted_price, " +
-    //     "p.product_actual_price, i.id, i.name, i.type, i.picByte " +
-    //     "FROM product p " +
-    //     "LEFT JOIN product_images pi ON p.product_id = pi.product_id " +
-    //     "LEFT JOIN image_model i ON pi.image_id = i.id";
-        
-    //     List<Product> products = jdbcTemplate.query(sql, new ResultSetExtractor<List<Product>>() {
-    //         @Override
-    //         public List<Product> extractData(ResultSet rs) throws SQLException, DataAccessException {
-    //             Map<Integer, Product> productMap = new HashMap<>();
-                
-    //             while (rs.next()) {
-    //                 Integer productId = rs.getInt("product_id");
-    //                 Product product = productMap.get(productId);
-                    
-    //                 if (product == null) {
-    //                     product = new Product();
-    //                     product.setProductId(productId);
-    //                     product.setProductName(rs.getString("product_name"));
-    //                     product.setProductDescription(rs.getString("product_description"));
-    //                     product.setProductDiscountedPrice(rs.getDouble("product_discounted_price"));
-    //                     product.setProductActualPrice(rs.getDouble("product_actual_price"));
-                        
-    //                     product.setProductImages(new HashSet<>());
-                        
-    //                     productMap.put(productId, product);
-    //                 }
-                    
-    //                 ImageModel image = new ImageModel();
-    //                 image.setId(rs.getLong("id"));
-    //                 image.setName(rs.getString("name"));
-    //                 image.setType(rs.getString("type"));
-    //                 image.setPicByte(rs.getBytes("picByte"));
-                    
-    //                 product.getProductImages().add(image);
-    //             }
-                
-    //             return new ArrayList<>(productMap.values());
-    //         }
-    //     });
-        
-    //     return products;
-    // }
 
     // LATEST WORKING VERSION
     public Page<Product> findAll(Pageable pageable) {
@@ -250,31 +168,6 @@ public class ProductRepository {
         return new PageImpl<>(list, PageRequest.of(currentPage, pageSize), products.size());
     }
 
-    // public List<Product> findByProductNameContainingIgnoreCaseOrProductDescriptionContainingIgnoreCase(
-    //     String key1, String key2, Pageable pageable) {
-    
-    //     String sql = "SELECT * FROM product WHERE LOWER(product_name) LIKE LOWER(?) OR LOWER(product_description) LIKE LOWER(?) LIMIT ? OFFSET ?";
-        
-    //     String searchKey1 = "%" + key1.toLowerCase() + "%";
-    //     String searchKey2 = "%" + key2.toLowerCase() + "%";
-    //     int limit = pageable.getPageSize();
-    //     int offset = Math.toIntExact(pageable.getOffset());
-
-    //     return jdbcTemplate.query(sql, ps -> {
-    //         ps.setString(1, searchKey1);
-    //         ps.setString(2, searchKey2);
-    //         ps.setInt(3, limit);
-    //         ps.setInt(4, offset);
-    //     }, (rs, rowNum) -> {
-    //         Product product = new Product();
-    //         product.setProductId(rs.getInt("product_id"));
-    //         product.setProductName(rs.getString("product_name"));
-    //         product.setProductDescription(rs.getString("product_description"));
-    //         product.setProductDiscountedPrice(rs.getDouble("product_discounted_price"));
-    //         product.setProductActualPrice(rs.getDouble("product_actual_price"));
-    //         return product;
-    //     });
-    // }
 
     public Page<Product> findByProductNameContainingIgnoreCaseOrProductDescriptionContainingIgnoreCase(
         String key1, String key2, Pageable pageable) {
@@ -289,7 +182,6 @@ public class ProductRepository {
         String searchKey1 = "%" + key1.toLowerCase() + "%";
         String searchKey2 = "%" + key2.toLowerCase() + "%";
         int limit = pageable.getPageSize();
-        // int offset = Math.toIntExact(pageable.getOffset());
 
         List<Product> products = jdbcTemplate.query(sql, ps -> {
             ps.setString(1, searchKey1);
@@ -329,9 +221,6 @@ public class ProductRepository {
 
         return new PageImpl<>(list, PageRequest.of(pageable.getPageNumber(), limit), total);
     }
-
-
-
     
 
     public void deleteById(Integer productId) throws SQLException {

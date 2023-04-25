@@ -13,7 +13,6 @@ export class UserAuthService {
 
   public getRoles(): [] {
     return JSON.parse(localStorage.getItem("roles")!)
-    // https://stackoverflow.com/questions/46915002/argument-of-type-string-null-is-not-assignable-to-parameter-of-type-string
   }
 
   public setToken(jwtToken: string) {

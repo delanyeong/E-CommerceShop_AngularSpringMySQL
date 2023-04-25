@@ -7,31 +7,22 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
 
-import jakarta.json.Json;
-import jakarta.json.JsonArrayBuilder;
 import vttp2022.mp2.shop.server.models.ImageModel;
 import vttp2022.mp2.shop.server.models.Product;
-import vttp2022.mp2.shop.server.services.ProductAPIService;
 import vttp2022.mp2.shop.server.services.ProductService;
 
 @RestController
@@ -73,16 +64,6 @@ public class ProductController {
         return imageModels;
     }
 
-    // @GetMapping(path="/getAllProducts")
-    // public List<Product> getAllProducts() {
-    //     return productSvc.getAllProducts();
-    // }
-
-    // @GetMapping(path="/getAllProducts")
-    // public List<Product> getAllProducts(@RequestParam(defaultValue="0") int pageNumber) {
-    //     return productSvc.getAllProducts(pageNumber);
-    // }
-
     @GetMapping(path="/getAllProducts")
     public List<Product> getAllProducts(@RequestParam(defaultValue="0") int pageNumber, @RequestParam(defaultValue = "") String searchKey) {
         List<Product> result = productSvc.getAllProducts(pageNumber, searchKey);
@@ -106,31 +87,5 @@ public class ProductController {
     public List<Product> getProductDetails(@PathVariable(name="isSingleProductCheckout") boolean isSingleProductCheckout, @PathVariable(name = "productId") Integer productId) throws SQLException {
         return productSvc.getProductDetails(isSingleProductCheckout, productId);
     }
-
-
-    // NOT IN USE
-    /* *** GIPHY template try only (Not in use) ***
-        @Autowired
-        private ProductAPIService productAISvc;
-
-        @GetMapping (path="getProducts", produces = MediaType.APPLICATION_JSON_VALUE)
-        @ResponseBody
-        public ResponseEntity<String> getProducts() {
-
-            List<Product> products = productAISvc.getProducts();
-            JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
-            products.stream()
-                .forEach(v -> {
-                    arrBuilder.add(v.toJson());
-                });
-
-            return ResponseEntity.ok(arrBuilder.build().toString());
-        }
-    */
-
-    
-
-
-
 
 }

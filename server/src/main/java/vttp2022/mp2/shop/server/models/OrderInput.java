@@ -29,12 +29,8 @@ public class OrderInput {
     public void setOrderProductQuantityList(List<OrderProductQuantity> orderProductQuantityList) {this.orderProductQuantityList = orderProductQuantityList;}
 
     
-    public String getTransactionId() {
-        return transactionId;
-    }
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
-    }
+    public String getTransactionId() { return transactionId; }
+    public void setTransactionId(String transactionId) { this.transactionId = transactionId; }
 
     
 

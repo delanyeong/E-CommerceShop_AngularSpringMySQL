@@ -20,10 +20,6 @@ export class ProductService {
     return this.http.get("/markOrderAsDelivered/" + orderId)
   }
 
-  // public getAllOrderDetailsForAdmin() : Observable<MyOrderDetails []> {
-  //   return this.http.get<MyOrderDetails[]>("http://localhost:8080/getAllOrderDetails");
-  // }
-
   public getAllOrderDetailsForAdmin(status: string) : Observable<MyOrderDetails []> {
     return this.http.get<MyOrderDetails[]>("/getAllOrderDetails/" + status);
   }
@@ -40,14 +36,6 @@ export class ProductService {
     return this.http.post<Product>("/addNewProduct", product);
   }
 
-  // public getAllProducts () {
-  //   return this.http.get<Product[]>("http://localhost:8080/getAllProducts");
-  // }
-
-  // public getAllProducts (pageNumber:any) {
-  //   return this.http.get<Product[]>("http://localhost:8080/getAllProducts?pageNumber=" + pageNumber);
-  // }
-
   public getAllProducts (pageNumber:any, searchkeyword: string = "") {
     return this.http.get<Product[]>("/getAllProducts?pageNumber=" + pageNumber + "&searchKey=" + searchkeyword);
   }
@@ -63,10 +51,6 @@ export class ProductService {
   public getProductDetails(isSingleProductCheckout:any, productId:any) {
     return this.http.get<Product[]>("/getProductDetails/" + isSingleProductCheckout + "/" + productId);
   }
-
-  // public placeOrder(orderDetails: OrderDetails) {
-  //   return this.http.post("http://localhost:8080/placeOrder", orderDetails)
-  // }
 
   public placeOrder(orderDetails: OrderDetails, isCartCheckout:any) {
     return this.http.post("/placeOrder/"+ isCartCheckout, orderDetails)
